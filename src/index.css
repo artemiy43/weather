@@ -30,4 +30,6 @@
 @import url(./blocks/email.css);
 @import url(./blocks/number.css);
 
+@import url(./blocks/preloader.css);
+
 @import url(./blocks/InfoTooltip/InfoTooltip.css);

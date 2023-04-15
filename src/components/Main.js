@@ -1,54 +1,53 @@
 import React from "react";
 import Maps from "./Map";
-import ZDMap from "./3DMap";
+// import ZDMap from "./3DMap";
 import { api } from "./api";
 import Menu from "./Menu";
-import InfoTooltip from "./InfoTooltip";
+import Preloader from "./Preloader";
+// import InfoTooltip from "./InfoTooltip";
 function Main() {
-  const [lat, setlat] = React.useState(0);
-  const [lon, setlon] = React.useState(0);
+  // const [lat, setlat] = React.useState(0);
+  // const [lon, setlon] = React.useState(0);
+  const [object, setObject] = React.useState(
+    {
+      lat:-1,
+      lon:-1
+    }
+  );
 
   const [parametres, setParametres] = React.useState({});
 
-  const [value, setValue] =  React.useState(0);
+  const [loading, setLoading] = React.useState(false);
+
 
   const [isOpen, setIsOpen] = React.useState(false);
-  const [isOnGlobe, setIsOnGlobe] = React.useState(false);
-  const [isInfoTooltipOpen, setInfoTooltipOpened] = React.useState(false);
   const num = 0;
 
-  let Mapitems = [
-    <ZDMap setInfoTooltipOpened={setInfoTooltipOpened} isOnGlobe={setIsOnGlobe} num={num} onClick={handleMapClick}  onClickMap={handleParametres}/>,
-    <Maps num={num} onClick={handleMapClick}  onClickMap={handleParametres}/>
-  ];
-
-  const items = [
-    { label: "3DMap", value: 0 },
-    { label: "2DMap", value: 1 },
-  ];
 
   React.useEffect(()=> {
-    api.getInfo(lat, lon)
+    setLoading(true);
+    Promise.resolve(api.getInfo(object.lat, object.lon))
     .then((res) => {
       handleParametres(res);
-      console.log(res);
     })
     .catch(err => {
       console.log(err);
-    });
-  },[lat, lon]);
+    })
+    .finally(setLoading(false))
+  },[object]);
   
-  function closePopup() {                      // закрытие попапа
-    setInfoTooltipOpened(false);
-  }
 
   function handleIsOpen(){
     setIsOpen(!isOpen);
   }
 
   function handleMapClick(X, Y) {
-    setlat(X);
-    setlon(Y);
+    // setlat(X);
+    // setlon(Y);
+    setObject({
+      lat:X,
+      lon:Y
+    })
   }
 
   function handleParametres(parametres) {
@@ -56,15 +55,17 @@ function Main() {
   }
 
   return(
-    <>
       <main className="content">
-        <Menu isOnGlobe={isOnGlobe} isOpen={isOpen} setValue={setValue} items={items} parametres={parametres} handleIsOpen={handleIsOpen}/>
+        {loading ? (
+          <Preloader/>
+        ) : (
+          <Menu isOpen={isOpen} parametres={parametres} handleIsOpen={handleIsOpen}/>
+        )}
+        {/* <Menu isOpen={isOpen} parametres={parametres} handleIsOpen={handleIsOpen}/> */}
         <div className="map__container page__container">
-            {Mapitems[value]}
+            <Maps num={num} onClick={handleMapClick}  onClickMap={handleParametres}/>
         </div>
       </main>
-      <InfoTooltip isOpen={isInfoTooltipOpen} onClose={closePopup}/>
-    </>
   );
 }
 

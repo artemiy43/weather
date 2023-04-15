@@ -31,11 +31,11 @@ function Maps(props) {
         webMercatorUtils
         ]) => {
 
+        esriConfig.apiKey = "AAPKc299fdea835641dd9348a853988d63168l5eW0o90eVgK6I5TXTdV1beR8AfCAhpfVYB9Mn9jE7VsTkoi_bv6yZkMzg4TUaX";
+
         const map = new Map({
           basemap: "arcgis-navigation"
         });
-
-        esriConfig.apiKey = "AAPKc299fdea835641dd9348a853988d63168l5eW0o90eVgK6I5TXTdV1beR8AfCAhpfVYB9Mn9jE7VsTkoi_bv6yZkMzg4TUaX";
 
         let view = new MapView({
           container: mapRef.current,
@@ -62,20 +62,20 @@ function Maps(props) {
 
         view.ui.add(bgExpand, "bottom-left");
 
-        function showCoordinates(evt) {
-          var point = view.toMap({x: evt.x, y: evt.y});
+        // function showCoordinates(evt) {
+        //   var point = view.toMap({x: evt.x, y: evt.y});
           
-          var mp = webMercatorUtils.webMercatorToGeographic(point);
+        //   var mp = webMercatorUtils.webMercatorToGeographic(point);
 
-          view.popup.open({
-            title: "Широта: " + mp.y.toFixed(3) + "   Долгота:" + mp.x.toFixed(3),
-            location: point
-          });
-        }
+        //   view.popup.open({
+        //     title: "Широта: " + mp.y.toFixed(3) + "   Долгота:" + mp.x.toFixed(3),
+        //     location: point
+        //   });
+        // }
   
-        view.when(function(){
-          view.on("pointer-move", showCoordinates);
-        });
+        // view.when(function(){
+        //   view.on("pointer-move", showCoordinates);
+        // });
 
         view.on("click", function(event) {
           props.onClick(event.mapPoint.latitude.toFixed(12),event.mapPoint.longitude.toFixed(12));
