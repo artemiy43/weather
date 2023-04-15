@@ -10,14 +10,14 @@ function Main() {
   // const [lon, setlon] = React.useState(0);
   const [object, setObject] = React.useState(
     {
-      lat:-1,
-      lon:-1
+      lat:0,
+      lon:0
     }
   );
 
   const [parametres, setParametres] = React.useState({});
 
-  const [loading, setLoading] = React.useState(false);
+  const [finished, setfinished] = React.useState(false);
 
 
   const [isOpen, setIsOpen] = React.useState(false);
@@ -25,7 +25,6 @@ function Main() {
 
 
   React.useEffect(()=> {
-    setLoading(true);
     Promise.resolve(api.getInfo(object.lat, object.lon))
     .then((res) => {
       handleParametres(res);
@@ -33,7 +32,7 @@ function Main() {
     .catch(err => {
       console.log(err);
     })
-    .finally(setLoading(false))
+    .finally(setfinished(true))
   },[object]);
   
 
@@ -56,12 +55,7 @@ function Main() {
 
   return(
       <main className="content">
-        {loading ? (
-          <Preloader/>
-        ) : (
-          <Menu isOpen={isOpen} parametres={parametres} handleIsOpen={handleIsOpen}/>
-        )}
-        {/* <Menu isOpen={isOpen} parametres={parametres} handleIsOpen={handleIsOpen}/> */}
+        <Menu finished={finished} isOpen={isOpen} parametres={parametres} handleIsOpen={handleIsOpen}/>
         <div className="map__container page__container">
             <Maps num={num} onClick={handleMapClick}  onClickMap={handleParametres}/>
         </div>
