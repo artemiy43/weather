@@ -1,35 +1,65 @@
+import Clear from '../images/Clear.png';
+import Clouds from '../images/Clouds.png';
+import Clouds25 from '../images/Clouds25.png';
+import Clouds50 from '../images/Clouds50.png';
+import Drizzle from '../images/Drizzle.png';
+import Mist from '../images/Mist.png';
+import Rain from '../images/Rain.png';
+import Snow from '../images/Snow.png';
+import Thunderstorm from '../images/Thunderstorm.png';
 function Menu({ finished, isOpen, parametres, handleIsOpen}) {
-    console.log(parametres);
-    console.log(finished);
+    let pic=''; 
+    switch(parametres.weather[0].main) {
+      case 'Thunderstorm':  
+        pic = Thunderstorm;
+        break;
+      case 'Clouds':  
+        pic = Clouds;
+        break;
+      case 'Clouds' && parametres.weather[0].id === 801:  
+        pic = Clouds25;
+        break;
+      case 'Clouds' && parametres.weather[0].id === 802:  
+        pic = Clouds50;
+        break;
+      case 'Drizzle':  
+        pic = Drizzle;
+        break;
+      case 'Mist' || 'Smoke'|| 'Haze'|| 'Dust'|| 'Fog'|| 'Sand'|| 'Ash'|| 'Squall'|| 'Tornado':  
+        pic = Mist;
+        break;
+      case 'Rain':  
+        pic = Rain;
+        break;
+      case 'Snow':  
+        pic = Snow;
+        break;
+      default:
+        pic = Clear;
+        break;
+    }
     if (finished === true)
       return(
           <div className={(isOpen===true) ? "menu" : "menu-unable"} id="menu">
-              <p className="menu__title">Weather Data</p>
-            
-              <button type="button" onClick={handleIsOpen}>{(isOpen===true) ? "Закрыть" : "Открыть"}</button>
-
+            <div className="menu__flex-container">
+              <h1 className="menu__title">Погода в</h1>
+              <h2 className="menu__text">{parametres.name}</h2>
+              <button className="menu__button" type="button" onClick={handleIsOpen}><span>{(isOpen===true) ? "Закрыть" : "Открыть"}</span></button>
+              <img className={(isOpen===true) ? "menu__pic" : "menu__pic-unable"} src={pic} alt="погода"/>
+            </div>
               <div className={(isOpen===true) ? "menu__grid-container" : "menu__grid-container-unable"}>
-                <p className="menu__span-origin">Основное описание: </p>
-                <p className="menu__span-origin">{(parametres!=={} && finished) ? parametres.weather[0].description : "NULL"}</p>
+                <p className="menu__span-coordinates">{parametres.weather[0].description}</p>
                 <p className="menu__span-coordinates">Температура</p>
-                <p className="menu__span-origin">Основная[градусы Цельсия]: </p>
-                <p className="menu__span-origin">{(parametres!=={} && finished) ? parametres.main.temp : "NULL"}</p>
-                <p className="menu__span-origin">Максимальная[градусы Цельсия]: </p>
-                <p className="menu__span-origin">{(parametres!=={} && finished) ? parametres.main.temp_max : "NULL"}</p>
-                <p className="menu__span-origin">Минимальная[градусы Цельсия]: </p>
-                <p className="menu__span-origin">{(parametres!=={} && finished) ? parametres.main.temp_min : "NULL"}</p>
-                <p className="menu__span-origin">Как чувствуется[градусы Цельсия]: </p>
-                <p className="menu__span-origin">{(parametres!=={} && finished) ? parametres.main.feels_like : "NULL"}</p>
-                <p className="menu__span-coordinates">Ветер</p>
-                <p className="menu__span-origin">Скорость[м/с]: </p>
-                <p className="menu__span-origin">{(parametres!=={} && finished) ? parametres.wind.speed : "NULL"}</p>
-                <p className="menu__span-origin">Направление[градусы]: </p>
-                <p className="menu__span-origin">{(parametres!=={} && finished) ? parametres.wind.deg : "NULL"}</p>
-                <p className="menu__span-coordinates">Другие показатели</p>
+                <p className="menu__span-origin">Основная °C: </p>
+                <p className="menu__span-origin">{parametres.main.temp}</p>
+                <p className="menu__span-origin">Как чувствуется °C: </p>
+                <p className="menu__span-origin">{parametres.main.feels_like}</p>
+                <p className="menu__span-origin">Скорость ветра м/с: </p>
+                <p className="menu__span-origin">{parametres.wind.speed}</p>
                 <p className="menu__span-origin">Атмосферное давление[Гектопаскаль]: </p>
-                <p className="menu__span-origin">{(parametres!=={} && finished) ? parametres.main.pressure : "NULL"}</p>
-                <p className="menu__span-origin">Влажность[Проценты]: </p>
-                <p className="menu__span-origin">{(parametres!=={} && finished) ? parametres.main.humidity : "NULL"}</p>
+                <p className="menu__span-origin">{parametres.main.pressure}</p>
+                <p className="menu__span-origin">Влажность[%]: </p>
+                <p className="menu__span-origin">{parametres.main.humidity}</p>
               </div>
           </div>
       );

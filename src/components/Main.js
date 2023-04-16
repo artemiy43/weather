@@ -10,8 +10,8 @@ function Main() {
   // const [lon, setlon] = React.useState(0);
   const [object, setObject] = React.useState(
     {
-      lat:0,
-      lon:0
+      lat:55.74,
+      lon:37.6
     }
   );
 
@@ -25,7 +25,8 @@ function Main() {
 
 
   React.useEffect(()=> {
-    Promise.resolve(api.getInfo(object.lat, object.lon))
+    console.log(object);
+    api.getInfo(object.lat, object.lon)
     .then((res) => {
       handleParametres(res);
     })
