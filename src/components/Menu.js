@@ -7,38 +7,39 @@ import Mist from '../images/Mist.png';
 import Rain from '../images/Rain.png';
 import Snow from '../images/Snow.png';
 import Thunderstorm from '../images/Thunderstorm.png';
-function Menu({ finished, isOpen, parametres, handleIsOpen}) {
+function Menu({ isOpen, parametres, handleIsOpen}) {
     let pic=''; 
-    switch(parametres.weather[0].main) {
-      case 'Thunderstorm':  
-        pic = Thunderstorm;
-        break;
-      case 'Clouds':  
-        pic = Clouds;
-        break;
-      case 'Clouds' && parametres.weather[0].id === 801:  
-        pic = Clouds25;
-        break;
-      case 'Clouds' && parametres.weather[0].id === 802:  
-        pic = Clouds50;
-        break;
-      case 'Drizzle':  
-        pic = Drizzle;
-        break;
-      case 'Mist' || 'Smoke'|| 'Haze'|| 'Dust'|| 'Fog'|| 'Sand'|| 'Ash'|| 'Squall'|| 'Tornado':  
-        pic = Mist;
-        break;
-      case 'Rain':  
-        pic = Rain;
-        break;
-      case 'Snow':  
-        pic = Snow;
-        break;
-      default:
-        pic = Clear;
-        break;
-    }
-    if (finished === true)
+    if (parametres.weather !== undefined)
+      switch(parametres.weather[0].main) {
+        case 'Thunderstorm':  
+          pic = Thunderstorm;
+          break;
+        case 'Clouds':  
+          pic = Clouds;
+          break;
+        case 'Clouds' && parametres.weather[0].id === 801:  
+          pic = Clouds25;
+          break;
+        case 'Clouds' && parametres.weather[0].id === 802:  
+          pic = Clouds50;
+          break;
+        case 'Drizzle':  
+          pic = Drizzle;
+          break;
+        case 'Mist' || 'Smoke'|| 'Haze'|| 'Dust'|| 'Fog'|| 'Sand'|| 'Ash'|| 'Squall'|| 'Tornado':  
+          pic = Mist;
+          break;
+        case 'Rain':  
+          pic = Rain;
+          break;
+        case 'Snow':  
+          pic = Snow;
+          break;
+        default:
+          pic = Clear;
+          break;
+      }
+    if (parametres.weather !== undefined)
       return(
           <div className={(isOpen===true) ? "menu" : "menu-unable"} id="menu">
             <div className="menu__flex-container">

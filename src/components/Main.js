@@ -1,13 +1,9 @@
 import React from "react";
 import Maps from "./Map";
-// import ZDMap from "./3DMap";
 import { api } from "./api";
 import Menu from "./Menu";
-import Preloader from "./Preloader";
-// import InfoTooltip from "./InfoTooltip";
 function Main() {
-  // const [lat, setlat] = React.useState(0);
-  // const [lon, setlon] = React.useState(0);
+  
   const [object, setObject] = React.useState(
     {
       lat:55.74,
@@ -17,23 +13,18 @@ function Main() {
 
   const [parametres, setParametres] = React.useState({});
 
-  const [finished, setfinished] = React.useState(false);
-
-
   const [isOpen, setIsOpen] = React.useState(false);
   const num = 0;
 
 
   React.useEffect(()=> {
-    console.log(object);
     api.getInfo(object.lat, object.lon)
     .then((res) => {
       handleParametres(res);
     })
     .catch(err => {
       console.log(err);
-    })
-    .finally(setfinished(true))
+    });
   },[object]);
   
 
@@ -56,7 +47,7 @@ function Main() {
 
   return(
       <main className="content">
-        <Menu finished={finished} isOpen={isOpen} parametres={parametres} handleIsOpen={handleIsOpen}/>
+        <Menu isOpen={isOpen} parametres={parametres} handleIsOpen={handleIsOpen}/>
         <div className="map__container page__container">
             <Maps num={num} onClick={handleMapClick}  onClickMap={handleParametres}/>
         </div>
