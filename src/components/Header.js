@@ -1,7 +1,9 @@
+import logopath from '../images/weather-app (1).png';
 function Header() {
     return(
     <header className="header page__container">
-        <p className="header__text">Weather-project</p>
+      <img src={logopath} alt='logo'/>
+      <p className="header__text">Weather-project</p>
     </header>
   );
 }
