@@ -6,3 +6,10 @@
   z-index: 1;
   max-width: 1800px;
 }
+
+@media (max-width: 600px)
+{
+  .map__container {
+    height: 780px;
+  }
+}

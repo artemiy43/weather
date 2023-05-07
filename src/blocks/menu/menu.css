@@ -135,6 +135,10 @@
   .menu__span-origin {
     font-size: 16px;
   }
+
+  .menu__span-coordinates {
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 425px)
@@ -148,6 +152,10 @@
   }
 
   .menu__span-origin {
+    font-size: 14px;
+  }
+
+  .menu__span-coordinates {
     font-size: 14px;
   }
 }
