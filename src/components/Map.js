@@ -1,91 +1,67 @@
-import React from "react";
-import { useRef } from "react";
-import { loadModules } from "esri-loader";
+import { useRef, useEffect } from "react";
+import Bookmarks from "@arcgis/core/widgets/Bookmarks";
+import Expand from "@arcgis/core/widgets/Expand";
+import MapView from "@arcgis/core/views/MapView";
+import WebMap from "@arcgis/core/WebMap";
 function Maps(props) {
   const num = props.num;
   const mapRef = useRef(null);
-  React.useEffect(()=> {
-    loadModules(
-      [
-        "esri/widgets/Search",
-        "esri/Map",
-        "esri/views/MapView",
-        "esri/rest/locator",
-        "esri/config",
-        "esri/widgets/BasemapGallery",
-        "esri/widgets/Expand",
-        "esri/geometry/support/webMercatorUtils"
-      ],
-      {
-        css: true
-      }
-    ).then(
-      ([
-        Search,
-        Map,
-        MapView,
-        locator,
-        esriConfig,
-        BasemapGallery,
-        Expand,
-        webMercatorUtils
-        ]) => {
+  useEffect(() => {
+    if (mapRef.current) {
+      /**
+       * Initialize application
+       */
+      const webmap = new WebMap({
+        portalItem: {
+          id: "aa1d3f80270146208328cf66d022e09c",
+        },
+      });
 
-        esriConfig.apiKey = "AAPKc299fdea835641dd9348a853988d63168l5eW0o90eVgK6I5TXTdV1beR8AfCAhpfVYB9Mn9jE7VsTkoi_bv6yZkMzg4TUaX";
+      const view = new MapView({
+        container: mapRef.current,
+        map: webmap,
+        center: [76.057852574651, 17.145581642251],
+        zoom: 3,
+      });
 
-        const map = new Map({
-          basemap: "arcgis-navigation"
-        });
+      const bookmarks = new Bookmarks({
+        view,
+      });
 
-        let view = new MapView({
-          container: mapRef.current,
-          map: map,
-          center: [76.057852574651, 17.145581642251],
-          zoom: 3
-        });
+      const bkExpand = new Expand({
+        view,
+        content: bookmarks,
+        expanded: true,
+      });
 
-        const search = new Search({  
-          view: view
-        });
+      // Add the widget to the top-right corner of the view
+      view.ui.add(bkExpand, "top-right");
 
-        view.ui.add(search, "top-leading");
+      // bonus - how many bookmarks in the webmap?
+      view.when(() => {
+        if (webmap.bookmarks && webmap.bookmarks.length) {
+          console.log("Bookmarks: ", webmap.bookmarks.length);
+        } else {
+          console.log("No bookmarks in this webmap.");
+        }
+      });
+      view.on("click", function (event) {
+        props.onClick(
+          event.mapPoint.latitude.toFixed(12),
+          event.mapPoint.longitude.toFixed(12)
+        );
+      });
+    }
+  }, [mapRef, num]);
 
-        var basemapGallery = new BasemapGallery({
-          view: view
-        });
-
-        const bgExpand = new Expand({
-          view: view,
-          content: basemapGallery
-        });
-
-
-        view.ui.add(bgExpand, "bottom-left");
-
-        // function showCoordinates(evt) {
-        //   var point = view.toMap({x: evt.x, y: evt.y});
-          
-        //   var mp = webMercatorUtils.webMercatorToGeographic(point);
-
-        //   view.popup.open({
-        //     title: "Широта: " + mp.y.toFixed(3) + "   Долгота:" + mp.x.toFixed(3),
-        //     location: point
-        //   });
-        // }
-  
-        // view.when(function(){
-        //   view.on("pointer-move", showCoordinates);
-        // });
-
-        view.on("click", function(event) {
-          props.onClick(event.mapPoint.latitude.toFixed(12),event.mapPoint.longitude.toFixed(12));
-        });
-      })
-    },[num]);
-
-      return (
-        <div className="webmap" ref={mapRef} />
-      );
+  return <div className="webmap" ref={mapRef} />;
 }
 
-  export default Maps;
+export default Maps;
+
+// center: [76.057852574651, 17.145581642251],
+//         zoom: 3
+
+// view.on("click", function(event) {
+//   props.onClick(event.mapPoint.latitude.toFixed(12),event.mapPoint.longitude.toFixed(12));
+// });
